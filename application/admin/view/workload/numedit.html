@@ -1,0 +1,196 @@
+{include file='common/meta'}
+
+    <title>新增文章 - 资讯管理 - H-ui.admin v3.0</title>
+    <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+    <meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+<link href="ADMIN_STATIC/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <article class="page-container">
+        <form class="form form-horizontal" id="form-article-edit" method="post">
+            <input type="hidden" name="id" value="{$data.id?$data.id:''}">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>媒体：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+                  <select name="media" id="media" class="select">
+                    <option value="0">--选择媒体--</option>
+                    <option value="1" {if condition="$data.media eq 1"}selected{/if} >IC</option>
+                    <option value="2" {if condition="$data.media eq 2"}selected{/if}>ID</option>
+                    <option value="3" {if condition="$data.media eq 3"}selected{/if}>IH</option>
+                    <option value="4" {if condition="$data.media eq 4"}selected{/if}>IOT</option>
+                    <option value="5" {if condition="$data.media eq 5"}selected{/if}>IOF</option>
+                  </select>
+				</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="title">文章标题：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="{$data.title}" placeholder=""  id="title" name="title">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="link">微信链接：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="{$data.link}" placeholder=""  id="link" name="link">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">推送时间：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text"  class="input-text" name="publish_time" onfocus="selecttime(1)" value="{$data.publish_time?$data.publish_time:''}" size="17" class="date" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="editor"><span class="c-red">*</span>编辑：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+                  <select name="editor" id="editor" class="select">
+                    <option value="">--选择编辑--</option>
+                      {foreach name="editors" item="vo"}
+                          <option  {if condition="$vo.username eq $data.editor"}selected{/if} >{$vo.username}</option>
+                      {/foreach}
+                  </select>
+				</span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">送达人数：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="send_num"  class="input-text" value="{$data.send_num}" size="17" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">阅读人数：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="read_num"  class="input-text" value="{$data.read_num}" size="17" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">阅读次数：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="read_times"  class="input-text" value="{$data.read_times}" size="17" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">公众号打开人数：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="official_num"  class="input-text" value="{$data.official_num}" size="17" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">公众号打开次数：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="official_times"  class="input-text" value="{$data.official_times}" size="17" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">朋友圈打开人数：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="timeline_num"  class="input-text" value="{$data.timeline_num}" size="17" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">朋友圈打开次数：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="timeline_times"  class="input-text" value="{$data.timeline_times}" size="17" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">分享人数：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="share_num"  class="input-text" value="{$data.share_num}" size="17" >
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">分享次数：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="share_times"  class="input-text" value="{$data.share_times}" size="17" >
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <button  class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+                    <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </article>
+
+   {include file='common/footer'}
+
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="ADMIN_STATIC/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="ADMIN_STATIC/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="ADMIN_STATIC/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="ADMIN_STATIC/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript">
+        function selecttime(flag){
+            if(flag==1){
+                var endTime = $("#countTimeend").val();
+                if(endTime != ""){
+                    WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',maxDate:endTime})}else{
+                    WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})}
+            }else{
+                var startTime = $("#countTimestart").val();
+                if(startTime != ""){
+                    WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',minDate:startTime})}else{
+                    WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})}
+            }
+        }
+
+        $('.meeting_radio').change(function () {
+            if($('.meeting_radio:checked').val() == 1){
+                $('.meeting-text').show()
+            }  else{
+                $('.meeting-text').hide()
+                $('.meeting-text').attr({'name':""})
+            }
+        })
+        $('.client_radio').change(function () {
+            if($('.client_radio:checked').val() == 1){
+                $('.client-text').show()
+            }  else{
+                $('.client-text').hide()
+                $('.client-text').attr({'name':""})
+            }
+        })
+        //表单验证
+        $("#form-article-edit").validate({
+            errorPlacement: function(error, element) {
+                // Append error within linked label
+                $( element )
+                    .closest( "form" )
+                    .find( "label[for='" + element.attr( "id" ) + "']" )
+                    .append( error );
+            },
+            rules:{
+                media:{required:true,min:1},
+                title:{required:true},
+                link:{required:true},
+                editor:{required:true},
+            },
+            submitHandler:function(form){
+                /**
+                 * 成功之后的回调函数
+                 * @type {{success: options.success}}
+                 */
+                var options = {
+                    success: function (data) {
+                        if(data.code==10000){
+                            layer.msg(data.msg,{icon:1,time:1000});
+                            setInterval("closeWindow()",1000);
+                            parent.location.href = parent.window.location.href;
+                        }else{
+                            layer.msg(data.msg,{icon:5,time:1000});
+                        }
+                    }
+                };
+                $(form).ajaxSubmit(options);
+            }
+        });
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

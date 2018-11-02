@@ -1,0 +1,109 @@
+{include file='common/meta'}
+<title>添加产品分类</title>
+</head>
+<body>
+<div class="page-container">
+  <form action="" method="post" class="form form-horizontal" id="form-category-cu">
+    <div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>分类名称：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+        <input type="text" class="input-text" value="{$data.name}" placeholder="" id="name" name="name">
+      </div>
+    </div>
+    <div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>媒体：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+                  <select name="media" id="media" class="select">
+                    <option value="0">--选择媒体--</option>
+                    <option value="1" >IC</option>
+                    <option value="2" >ID</option>
+                    <option value="3" >IH</option>
+                    <option value="4" >IOT</option>
+                    <option value="5" >IOF</option>
+                  </select>
+				</span>
+      </div>
+    </div>
+    <div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>类型：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+                  <select name="type" id="type" class="select">
+                    <option value="0">--选择类型--</option>
+                    <option value="1" >会议</option>
+                    <option value="2" >厂家</option>
+                    <option value="3" >产品</option>
+                  </select>
+				</span>
+      </div>
+    </div>
+
+    <div class="row cl company_div" style="display: none;" >
+      <label class="form-label col-xs-4 col-sm-2">厂家：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+                  <select name="company" id="company" class="select">
+                    <option value="0">--选择厂家--</option>
+                    <foreach name="data.companys" item="vo">
+                      <option value="1" >会议</option>
+                    </foreach>
+                  </select>
+				</span>
+      </div>
+    </div>
+
+    <input type="hidden" name="id" value="{$data.id}">
+    <div class="row cl">
+      <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+        <button  type="submit" class="btn btn-primary radius save" ><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+
+        <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </form>
+</div>
+{include file='common/footer'}
+
+<!--请在下方写此页面业务相关的脚本--> 
+<script type="text/javascript" src="ADMIN_STATIC/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="ADMIN_STATIC/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="ADMIN_STATIC/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('#type').change(function () {
+        if($(this).val() == 3){
+            $('.company_div').show();
+        }
+
+    })
+
+    $('#form-category-cu').validate({
+        rules:{
+            name:'required',
+            media:'required ',
+            type:'required',
+        },
+        submitHandler:function (form) {
+            var option = {
+                success:function (data) {
+                    if(data.code == 10000){
+                        layer.msg(data.msg,{icon:1,time:1000});
+                        setInterval("closeWindow()",1000);
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000})
+                    }
+                }
+            }
+            $(form).ajaxSubmit(option);
+        }
+    })
+
+});
+function closeWindow(){
+    var index = parent.layer.getFrameIndex(window.name);
+    window.parent.location.reload();
+}
+</script>
+</body>
+</html>

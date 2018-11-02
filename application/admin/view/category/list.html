@@ -1,0 +1,130 @@
+﻿<!--包含头部文件-->
+{include file="common/meta" /}
+{include file="common/header" /}
+{include file="common/menu" /}
+
+<body>
+<section class="Hui-article-box">
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span> 分类管理
+	<span class="c-gray en">&gt;</span> 分类列表
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+
+<div class="page-container">
+	<form action="/admin/Category/lst" method="get">
+		<div class="text-c">
+			<span class="select-box inline">
+				<select name="search_media" class="select">
+					<option value="0">--媒体--</option>
+                    <option value="1" >IC</option>
+                    <option value="2" >ID</option>
+                    <option value="3" >IH</option>
+                    <option value="4" >IOT</option>
+                    <option value="5" >IOF</option>
+				</select>
+			</span>
+			<span class="select-box inline">
+				<select name="search_type" class="select">
+					<option value="0">--类型--</option>
+                    <option value="1" >会议</option>
+                    <option value="2" >厂家</option>
+                    <option value="3" >产品</option>
+				</select>
+			</span>
+			<input type="text" name="search_name" id="search_name" placeholder=" 分类名称" style="" value="{$Think.get.search_name}" class="input-text inline">
+			<button  class="btn btn-success" type="submit">
+				<i class="Hui-iconfont">&#xe665;</i> 搜索
+			</button>
+		</div>
+	</form>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+		<a class="btn btn-primary radius" onclick="o2o_s_add('添加生活服务分类','/admin/Category/cu','',600)" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a>
+		<span class="r">共有数据：<strong></strong> 条</span>
+	</div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+			<tr class="text-c">
+				<th width="80">ID</th>
+				<th width="150">媒体</th>
+				<th width="250">名称</th>
+				<th width="150">类型</th>
+				<th width="150">操作时间</th>
+				<th width="150">操作人</th>
+				<th width="150">操作</th>
+			</tr>
+			</thead>
+			<tbody>
+			{volist name='list' id='vo'}
+			<tr class="text-c">
+				<td>{$vo.id}</td>
+				<td>{$vo.media | admin_media}</td>
+				<td class="text-c">{$vo.name}</td>
+				<td>{$vo.type | category_type}</td>
+				<td>{$vo.create_time}</td>
+				<td>{$vo.admin}</td>
+				<td class="td-manage">
+					<a style="text-decoration:none" class="ml-5" onClick="o2o_s_edit('编辑','{:url('Category/cu',['id'=>$vo.id])}','',300)" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
+					<!--<a style="text-decoration:none" class="ml-5" onClick="o2o_del('{:url('Category/status',['id'=>$vo.id,'status'=>-1])}')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>-->
+					<a style="text-decoration:none" class="ml-5"  onClick="article_del(this,'{:url('Category/del')}',{$vo.id})"  href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+				</td>
+                <!--onClick="o2o_del('{:url('Category/status',['id'=>$vo.id,'status'=>-1])}')"-->
+			</tr>
+			{/volist}
+			</tbody>
+		</table>
+		<div class="cl pd-5 bg-1 bk-gray mt-20 page-div"> <span class="l"> {$list->render()}</span></div>
+	</div>
+</div>
+</section>
+<!--包含头部文件-->
+{include file="common/footer" /}
+<script>
+    $('.order-div').dblclick(function () {
+		$(this).find('.order-span').hide();
+		$(this).find('.listorder').show().focus();
+    })
+	$('.listorder').blur(function () {
+		var id = $(this).attr('attr-id');
+		var order = $(this).val();
+		$.post('/admin/category/listorder',{id:id,listorder:order},
+		function (data) {
+			if(data.code == 1){
+			    location.href = data.data;
+			}else{
+			    alert('sorry');
+			}
+        },'json')
+		$(this).hide();
+		$(this).parent().find('.order-span').show()
+    })
+    $('.td-status').click(function () {
+        var tid = $(this).attr('tid');
+        var status;
+        if($(this).text() =='停用'){
+            status =1;
+        }else{
+            status = 0;
+        }
+        var obj = $(this);
+        $.post('/admin/Category/status',{id:tid,status:status},
+        function (data) {
+            if(data.code == 10000){
+                if(obj.text() =='停用'){
+                    obj.html("<span class='label label-success radius'>正常</span>")
+                }else{
+                    obj.html("<span class='label label-danger radius'>停用</span>")
+                }
+            }
+        },'json')
+    })
+
+    var SCOPE = {
+        'listorder_url': "{:url('category/listorder')}",
+    };
+
+</script>
+</body>
+</html>

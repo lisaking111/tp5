@@ -1,0 +1,348 @@
+{include file='common/meta'}
+
+    <title>新增文章 - 资讯管理 - H-ui.admin v3.0</title>
+    <meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+    <meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+    <style>
+        #col_editor,#web_editor,#product,#client{
+            position: relative;
+        }
+        .search_ul{
+            background: #fff;
+            display: none;
+            position: absolute;
+            /*left: 15px;top:31px;*/
+            z-index: 1;
+            width: 296px;
+            border: 1px solid #ddd;
+            padding-left: 5px;
+        }
+
+        .search_ul li{
+
+        }
+        .search_ul li:hover{
+            background: #0e90d2;
+            color:#fff
+        }
+    </style>
+<link href="ADMIN_STATIC/lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <article class="page-container">
+        <form class="form form-horizontal" id="form-article-edit" method="post">
+            <input type="hidden" name="id" value="{$data.id?$data.id:''}">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="media"><span class="c-red">*</span>媒体：</label>
+                <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+                    <select name="media" id="media" class="select" disabled>
+                        <option value="0">--选择媒体--</option>
+                        <option value="1" {if condition="$data.media eq 1"}selected{/if}>IC</option>
+                        <option value="2" {if condition="$data.media eq 2"}selected{/if}>ID</option>
+                        <option value="3" {if condition="$data.media eq 3"}selected{/if}>IH</option>
+                        <option value="4" {if condition="$data.media eq 4"}selected{/if}>IOT</option>
+                        <option value="5" {if condition="$data.media eq 5"}selected{/if}>IOF</option>
+                    </select>
+
+
+                    </span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="editor"><span class="c-red">*</span>编辑：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+                  <select name="editor" id="editor" class="select">
+                    <option value="">--选择编辑--</option>
+                      {foreach name="editors" item="vo"}
+                          <option  {if condition="$vo.username eq $data.editor"}selected{/if} >{$vo.username}</option>
+                      {/foreach}
+                  </select>
+				</span>
+                </div>
+            </div>
+
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="title"><span class="c-red">*</span>文章标题：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="{$data.title?$data.title:''}" placeholder="" id="title" name="title">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="link"><span class="c-red">*</span>微信链接：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="{$data.link?$data.link:''}" placeholder="" id="link" name="link">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="source"><span class="c-red">*</span>文章来源：</label>
+                <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+                    <select name="source" class="select">
+                        <option value="">--全部来源--</option>
+                        <option  {if condition="$data.source eq '自行选题'"}selected{/if}>自行选题</option>
+                        <option  {if condition="$data.source eq '采访'"}selected{/if}>采访</option>
+                        <option   {if condition="$data.source eq '约稿'"}selected{/if}>约稿</option>
+                        <option  {if condition="$data.source eq '转载'"}selected{/if}>转载</option>
+                        <option   {if condition="$data.source eq '会议'"}selected{/if}>会议</option>
+                        <option  {if condition="$data.source eq '其他'"}selected{/if}>其他</option>
+                    </select>
+                    </span>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="type"><span class="c-red">*</span>编辑类型：</label>
+                <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+                    <select name="type" class="select">
+                        <option value="">--全部类型--</option>
+                        <option value="编写" {if condition="$data.type eq '编写'"}selected{/if}>编写</option>
+                        <option value="编译" {if condition="$data.type eq '编译'"}selected{/if}>编译</option>
+                        <option value="校对" {if condition="$data.type eq '校对'"}selected{/if}>校对</option>
+                        <option value="综合整理" {if condition="$data.type eq '综合整理'"}selected{/if}>综合整理</option>
+                        <option value="无" {if condition="$data.type eq '无'"}selected{/if}>无</option>
+                    </select>
+                    </span> </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="field"><span class="c-red">*</span>疾病领域：</label>
+                <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+                    <select name="field" class="select">
+                        <option value="">--全部领域--</option>
+                        {foreach name='fields' item='vo'}
+                        <option {if condition="$data.field eq $vo"}selected{/if}>{$vo}</option>
+                        {/foreach}
+                    </select>
+                    </span> </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="meeting">会议名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="radio" name="meeting" class="meeting_radio " value="" {empty name="data.meeting"}checked{/empty} >无
+                    <input type="radio" name="meeting" class="meeting_radio " value="1" {notempty name="data.meeting"}checked{/notempty}>有
+                    请选择
+                    <input class="input-text meeting_search meeting-text" value="{$data.meeting}" name="meeting" autocomplete="off" {empty name="data.meeting"}style="display:none"{/empty}>
+                    <ul class="search_ul">
+                    </ul>
+                    <select  id="meeting"  style="display: none" >
+                        {foreach name='meetings' item='vo'}
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="meeting">厂商：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="radio" name="client" class="client_radio " value="" {empty name="data.client"}checked{/empty} >无
+                    <input type="radio" name="client" class="client_radio " value="1" {notempty name="data.client"}checked{/notempty}>有
+                    请选择
+                    <input class="input-text meeting_search client-text" value="{$data.client}" name="client" autocomplete="off" {empty name="data.client"}style="display:none"{/empty}>
+                    <ul class="search_ul">
+                    </ul>
+                    <select  id="client"  style="display: none" >
+                        {foreach name='clients' item='vo'}
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row cl" id="product_div" {empty name="data.product"}style="display: none"{/empty}>
+                <label class="form-label col-xs-4 col-sm-2" for="product"><span class="c-red">*</span>产品：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <span class="select-box ">
+                    <select  id="product" name="product" class="select">
+                        <option value="">--选择产品--</option>
+                        {foreach name='products' item='vo'}
+                        <option  {if condition="$data.product eq $vo.name"}selected{/if}>{$vo.name}</option>
+                        {/foreach}
+                    </select>
+                    </span>
+                </div>
+            </div>
+            <div class="row cl">支珅 张宇 刘丽 董利转 刘丹 胡鑫
+                <label class="form-label col-xs-4 col-sm-2" for="col_editor"><span class="c-red">*</span>采编：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <select name="col_editor" class="select">
+                        <option value="">--选择采编--</option>
+                        <option  {if condition="$data.col_editor eq '张婧婧'"}selected{/if}>张婧婧</option>
+                        <option  {if condition="$data.col_editor eq '雷林'"}selected{/if}>雷林</option>
+                        <option  {if condition="$data.col_editor eq '彭龙妹'"}selected{/if}>彭龙妹</option>
+                        <option  {if condition="$data.col_editor eq '陈芳菲'"}selected{/if}>陈芳菲</option>
+                        <option  {if condition="$data.col_editor eq '董丽霞'"}selected{/if}>董丽霞</option>
+                        <option  {if condition="$data.col_editor eq '陈杨'"}selected{/if}>陈杨</option>
+                        <option  {if condition="$data.col_editor eq '展静怡'"}selected{/if}>展静怡</option>
+                        <option  {if condition="$data.col_editor eq '支珅'"}selected{/if}>支珅</option>
+                        <option  {if condition="$data.col_editor eq '张宇'"}selected{/if}>张宇</option>
+                        <option  {if condition="$data.col_editor eq '刘丽'"}selected{/if}>刘丽</option>
+                        <option  {if condition="$data.col_editor eq '董利转'"}selected{/if}>董利转</option>
+                        <option  {if condition="$data.col_editor eq '刘丹'"}selected{/if}>刘丹</option>
+                        <option  {if condition="$data.col_editor eq '胡鑫'"}selected{/if}>胡鑫</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="countTimestart">推送时间：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" name="publish_time" class="input-text" id="countTimestart" onfocus="selecttime(1)" value="{$data.publish_time?$data.publish_time:''}" size="17" class="date" readonly>
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <button  class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 提交</button>
+                    <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </article>
+
+   {include file='common/footer'}
+
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="ADMIN_STATIC/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+    <script type="text/javascript" src="ADMIN_STATIC/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="ADMIN_STATIC/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="ADMIN_STATIC/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript">
+        function selecttime(flag){
+            if(flag==1){
+                var endTime = $("#countTimeend").val();
+                if(endTime != ""){
+                    WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:endTime})}else{
+                    WdatePicker({dateFmt:'yyyy-MM-dd'})}
+            }else{
+                var startTime = $("#countTimestart").val();
+                if(startTime != ""){
+                    WdatePicker({dateFmt:'yyyy-MM-dd',minDate:startTime})}else{
+                    WdatePicker({dateFmt:'yyyy-MM-dd'})}
+            }
+        }
+
+        $('.meeting_radio').change(function () {
+            if($('.meeting_radio:checked').val()!= 0){
+                $('.meeting-text').show()
+                $('.meeting-text').attr({'name':"meeting"})
+            }  else{
+                $('.meeting-text').hide()
+                $('.meeting-text').attr({'name':""})
+            }
+        })
+        $('.client_radio').change(function () {
+            if($('.client_radio:checked').val() != 0){
+                $('.client-text').show()
+                $('#product_div').show()
+                $('.client-text').attr({'name':"client"})
+//                $('#product').attr({'name':"product"})
+            }  else{
+                $('.client-text').hide()
+                $('.client-text').attr({'name':""})
+                $('#product_div').hide()
+                $('#product').val('')
+            }
+        })
+        //表单验证
+        $("#form-article-edit").validate({
+            errorPlacement: function(error, element) {
+                // Append error within linked label
+                $( element )
+                    .closest( "form" )
+                    .find( "label[for='" + element.attr( "id" ) + "']" )
+                   .append( error );
+            },
+            rules:{
+                title:{required:true,maxlength:50},
+                link:{required:true},
+                web_editor:{required:true},
+                col_editor:{required:true},
+            },
+            submitHandler:function(form){
+                /**
+                 * 成功之后的回调函数
+                 * @type {{success: options.success}}
+                 */
+                var options = {
+                    success: function (data) {
+                        if(data.code==10000){
+                            layer.msg(data.msg,{icon:1,time:1000});
+                            setInterval("closeWindow()",1000);
+                            parent.location.href = parent.window.location.href;
+                        }else{
+                            layer.msg(data.msg,{icon:5,time:1000});
+                        }
+                    }
+                };
+                $(form).ajaxSubmit(options);
+            }
+        });
+        //会议厂商栏 按键后搜索
+        $('.meeting_search').keyup(function () {
+            var search_meeting_str = $(this).val();
+            var len = $(this).parent().find('option').length;
+            var append = '';
+            for (var i=0; i<len;i++){
+                if($(this).parent().find('option:eq('+i+')').text().indexOf(search_meeting_str)>=0){
+                    append +='<li>'+$(this).parent().find('option')[i].text+'</li>';
+                }
+            }
+            $(this).next().html(append);
+            $(this).next().show()
+        })
+        //会议厂商栏 失去焦点后检查
+        $('.meeting_search').blur(function(){
+            var search_meeting_str = $(this).val();
+            var len = $(this).parent().find('option').length;
+            var flag = 0;
+            for (var i=0; i<len;i++){
+                if($(this).parent().find('option:eq('+i+')').text() === search_meeting_str){
+                    flag =1;
+                }
+            }
+            if(flag == 0){
+                $(this).val('');
+            }
+        })
+        //会议厂商栏 双击出现全部
+        $('.meeting_search').dblclick(function () {
+            var len = $(this).parent().find('option').length;
+            var append = '';
+            for (var i=0; i<len;i++){
+                    append +='<li>'+$(this).parent().find('option')[i].text+'</li>';
+            }
+            $(this).next().html(append);
+            $(this).next().show()
+        })
+
+        $('#product').click(function(){
+            var client = $('.client-text').val();
+            if( client == ''){
+                alert('请先选择厂商');return;
+            }
+        })
+
+        $(document).on('click','.search_ul li',function () {
+            $(this).parent().prev().val($(this).text())
+
+            var client = $('.client-text').val();
+            if( client == ''){
+                alert('请先选择厂商');return;
+            }
+            $('#client option').each(function () {
+                if($(this).text() == client){
+                    client_id = $(this).attr('value');
+                    $.post('/admin/Common/getProductList',{client_id:client_id},
+                        function(data){
+                            $('#product').html('<option value="">--请选择产品--</option>')
+                            for(var i=0;i<data.length;i++){
+                                $('#product').append('<option>'+data[i].name+'</option>')
+                            }
+                        })
+                }
+            })
+        })
+        $('.search_ul').prev().blur(function () {
+            $(this).next().delay(300).hide(0)
+        })
+
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>
